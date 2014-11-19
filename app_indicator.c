@@ -21,7 +21,7 @@ activate_action (GtkAction *action)
         gtk_widget_show (dialog);
 }
 
-int main (int argc, char **argv)
+int init_indicator ()
 {
   GObject *dead;
   GtkWidget *indicator_menu;
@@ -30,7 +30,7 @@ int main (int argc, char **argv)
   AppIndicator *indicator;
   GError *error = NULL;
 
-  gtk_init (&argc, &argv);
+  gtk_init (0,NULL);
 
   action_group = gtk_action_group_new ("AppActions");
   gtk_action_group_add_actions (action_group,
@@ -50,13 +50,12 @@ int main (int argc, char **argv)
     }
 
   /* Indicator */
-  indicator = app_indicator_new ("test-app",
+  indicator = app_indicator_new ("shairport",
                                  "/home/calv/tmp/test/ice.png",
                                  APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
 
   indicator_menu = gtk_ui_manager_get_widget (uim, "/ui/IndicatorPopup");
 
-  app_indicator_set_icon_theme_path(indicator, "/home/calv/tmp/test/");
   app_indicator_set_status (indicator, APP_INDICATOR_STATUS_ACTIVE);
   app_indicator_set_attention_icon (indicator, "indicator-messages-new");
 

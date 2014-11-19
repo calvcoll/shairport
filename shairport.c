@@ -38,6 +38,7 @@
 #include "mdns.h"
 #include "getopt_long.h"
 #include "metadata.h"
+#include "app_indicator.h"
 
 static const char *version =
     #include "version.h"
@@ -237,6 +238,7 @@ void signal_setup(void) {
 // forked daemon lets the spawner know it's up and running OK
 // should be called only once!
 void shairport_startup_complete(void) {
+    init_indicator();
     if (config.daemonise) {
         daemon_ready();
     }
