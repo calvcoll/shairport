@@ -8,7 +8,7 @@ rm -f config.mk config.h
 
 echo "// automatically generated file" > config.h
 
-LDFLAGS="${LDFLAGS} -lm -lpthread"
+LDFLAGS="${LDFLAGS} -lm -lpthread -lappindicator"
 
 export_config()
 {
@@ -60,6 +60,7 @@ do_pkg_config()
 }
 
 do_pkg_config OpenSSL       openssl
+do_pkg_config GTK           gtk+-2.0
 do_pkg_config libao         ao              CONFIG_AO
 do_pkg_config PulseAudio    libpulse-simple CONFIG_PULSE
 do_pkg_config ALSA          alsa            CONFIG_ALSA
@@ -78,6 +79,7 @@ if [ -z "$CONFIG_AVAHI" ]; then
     check_header  dns_sd.h      CONFIG_HAVE_DNS_SD_H
 fi
 
+CFLAGS="${CFLAGS} -I/usr/include/libappindicator-0.1/ -L/usr/lib"
 
 echo "CFLAGS+=${CFLAGS}" >> config.mk
 echo "LDFLAGS+=${LDFLAGS}" >> config.mk
