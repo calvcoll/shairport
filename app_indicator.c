@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <libappindicator/app-indicator.h>
 #include "app_indicator.h"
+#include "common.h"
 
 static GtkActionEntry entries[] = {
   { "New",      "document-new", "_New", "<control>N",
@@ -10,7 +11,7 @@ static GtkActionEntry entries[] = {
   { "Save",     "document-save", "_Save", "<control>S",
     "Save file", G_CALLBACK (activate_action) },
   { "Quit",     "application-exit", "_Quit", "<control>Q",
-    "Exit the application", G_CALLBACK (gtk_main_quit) },
+    "Exit the application", G_CALLBACK (shutdown_gtk) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
@@ -23,6 +24,12 @@ static const gchar *ui_info =
 "    <menuitem action='Quit' />"
 "  </popup>"
 "</ui>";
+
+static void
+shutdown_gtk(void) {
+  gtk_main_quit();
+  shairport_shutdown(0);
+}
 
 static void
 activate_action (GtkAction *action)
@@ -43,7 +50,7 @@ activate_action (GtkAction *action)
         gtk_widget_show (dialog);
 }
 
-int init_indicator ()
+int init_indicator (void)
 {
   GObject *dead;
   GtkWidget *indicator_menu;
