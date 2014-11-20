@@ -238,7 +238,7 @@ void signal_setup(void) {
 // forked daemon lets the spawner know it's up and running OK
 // should be called only once!
 void shairport_startup_complete(void) {
-    init_indicator();
+    startup_gtk();
     if (config.daemonise) {
         daemon_ready();
     }

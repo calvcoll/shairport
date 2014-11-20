@@ -2,6 +2,7 @@
 #include <libappindicator/app-indicator.h>
 #include "app_indicator.h"
 #include "common.h"
+#include "pthread.h"
 
 static GtkActionEntry entries[] = {
   { "New",      "document-new", "_New", "<control>N",
@@ -25,10 +26,12 @@ static const gchar *ui_info =
 "  </popup>"
 "</ui>";
 
-static void
-shutdown_gtk(void) {
+static pthread_t gtk_thread;
+
+void shutdown_gtk(void) {
   gtk_main_quit();
   shairport_shutdown(0);
+  pthread_exit(&gtk_thread);
 }
 
 static void
@@ -50,7 +53,7 @@ activate_action (GtkAction *action)
         gtk_widget_show (dialog);
 }
 
-int init_indicator (void)
+static void *init_indicator (void *pconn)
 {
   GObject *dead;
   GtkWidget *indicator_menu;
@@ -92,5 +95,9 @@ int init_indicator (void)
 
   gtk_main ();
 
-  return 0;
+  return NULL;
+}
+
+void startup_gtk(void) {
+  pthread_create(&gtk_thread, NULL, &init_indicator, NULL);
 }
