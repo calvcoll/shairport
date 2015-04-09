@@ -37,6 +37,7 @@
 
 #include "common.h"
 #include "metadata.h"
+#include "app_indicator.h"
 
 metadata player_meta;
 static int fd = -1;
@@ -157,6 +158,8 @@ void metadata_cover_image(const char *buf, int len, const char *ext) {
         return;
     }
     close(cover_fd);
+
+    indicator_set_image_data(buf, len);
 
     debug(1, "Cover Art file is %s\n", path);
     metadata_set(&player_meta.artwork, path+strlen(dir)+1);
