@@ -6,17 +6,6 @@ static pthread_t gtk_thread;
 GtkImage *coverart;
 GtkImageMenuItem *album_cover;
 
-void setup_icon() {
-    char* path = "";
-    #ifdef __unix__
-    path = getenv("HOME");
-    #elif _WIN32
-    path = getenv("HOMEDRIVE") + getenv("HOMEPATH");
-    #endif
-    strcat(path, "/shairport/");
-    printf("%s", path);
-}
-
 void indicator_set_image_data(const char *buffer, int length) {
     GdkPixbufLoader *loader;
     GdkPixbuf *pixbuf;
