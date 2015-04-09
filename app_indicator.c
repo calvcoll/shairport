@@ -1,11 +1,6 @@
 #ifdef __unix__
 
-#include <gtk/gtk.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <libappindicator/app-indicator.h>
 #include "app_indicator.h"
-#include "common.h"
-#include "pthread.h"
 
 static pthread_t gtk_thread;
 GtkImage *coverart;
@@ -18,7 +13,8 @@ void setup_icon() {
     #elif _WIN32
     path = getenv("HOMEDRIVE") + getenv("HOMEPATH");
     #endif
-    printf(path);
+    strcat(path, "/shairport/");
+    printf("%s", path);
 }
 
 void indicator_set_image_data(const char *buffer, int length) {

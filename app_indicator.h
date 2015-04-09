@@ -8,9 +8,9 @@
 #include <libappindicator/app-indicator.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "app_indicator.h"
 #include "common.h"
 #include "pthread.h"
+#include <string.h>
 
 struct stat info;
 
