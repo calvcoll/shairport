@@ -26,9 +26,9 @@ void shutdown_gtk(void) {
 
 static void *init_indicator (void *pconn)
 {
-    setup_icon();
-    GtkMenu *indicator_menu;
-    GtkMenuItem *quit_button;
+    // setup_icon();
+    GtkWidget *indicator_menu;
+    GtkWidget *quit_button;
     AppIndicator *indicator;
 
     gtk_init (0,NULL);
@@ -40,7 +40,7 @@ static void *init_indicator (void *pconn)
     app_indicator_set_status (indicator, APP_INDICATOR_STATUS_ACTIVE);
     app_indicator_set_attention_icon (indicator, "indicator-messages-new");
 
-    indicator_menu = GTK_MENU(gtk_menu_new());
+    indicator_menu = gtk_menu_new();
     album_cover = gtk_image_menu_item_new();
 
     quit_button = gtk_menu_item_new_with_label("Quit");

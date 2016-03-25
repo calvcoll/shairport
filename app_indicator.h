@@ -14,6 +14,7 @@
 
 struct stat info;
 
+void startup_gtk(void);
 void shutdown_gtk(void);
 void indicator_set_image_data(const char *buffer, int length);
 
