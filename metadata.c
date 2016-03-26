@@ -116,8 +116,8 @@ void metadata_write(void) {
 }
 
 void metadata_cover_image(const char *buf, int len, const char *ext) {
-    if (!config.meta_dir)
-        return;
+    // if (!config.meta_dir)
+    //     return;
 
     if (buf) {
         debug(1, "Cover Art set\n");
@@ -142,27 +142,28 @@ void metadata_cover_image(const char *buf, int len, const char *ext) {
 
     size_t pl = strlen(dir) + 1 + strlen(prefix) + strlen(img_md5_str) + 1 + strlen(ext);
 
-    char *path = malloc(pl+1);
-    snprintf(path, pl+1, "%s/%s%s.%s", dir, prefix, img_md5_str, ext);
+    if (config.meta_dir) {
+        char *path = malloc(pl+1);
+        snprintf(path, pl+1, "%s/%s%s.%s", dir, prefix, img_md5_str, ext);
+        int cover_fd = open(path, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
 
-    int cover_fd = open(path, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+        if (cover_fd < 0) {
+            warn("Could not open file %s for writing cover art", path);
+            return;
+        }
 
-    if (cover_fd < 0) {
-        warn("Could not open file %s for writing cover art", path);
-        return;
-    }
+        if (write(cover_fd, buf, len) < len) {
+            warn("writing %s failed\n", path);
+            free(path);
+            return;
+        }
+        close(cover_fd);
+        debug(1, "Cover Art file is %s\n", path);
 
-    if (write(cover_fd, buf, len) < len) {
-        warn("writing %s failed\n", path);
+        metadata_set(&player_meta.artwork, path+strlen(dir)+1);
+
+        indicator_set_image_data(buf, len, &player_meta);
         free(path);
-        return;
     }
-    close(cover_fd);
 
-    indicator_set_image_data(buf, len);
-
-    debug(1, "Cover Art file is %s\n", path);
-    metadata_set(&player_meta.artwork, path+strlen(dir)+1);
-
-    free(path);
 }
